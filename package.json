@@ -1,0 +1,14 @@
+{
+  "name": "dps909_releast_0.1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "CheckURL.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jianpeng Zhang",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.88.2"
+  }
+}

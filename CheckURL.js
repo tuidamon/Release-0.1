@@ -34,13 +34,13 @@ if (opts[0].startsWith("--") || opts[0].startsWith("/")) {     //if it's a commn
             URLs.forEach(url => {
                 request.get({ uri: url, timeout: 5000 }, function (err, response, body) {
                     if (err) {
-                        console.log(url + " error encountered.")
+                        console.log("Error encountered: " + url)
                     } else if (response.statusCode == 200) {
-                        console.log(url + " this page is ok.")
+                        console.log("This page is ok: " + url)
                     } else if (response.statusCode == 400 || response.statusCode == 404) {
-                        console.log(url + " can not find this page.")
+                        console.log("Can not find this page: " + url)
                     } else {
-                        console.log(url + " status is unkown.")
+                        console.log("Unkown status: " + url)
                     }
                 })
             })

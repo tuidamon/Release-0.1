@@ -1,23 +1,23 @@
-# Release-0.1
+# Webpage status checking tool
 
-MIT License
+##Installation
 
-Copyright (c) [2020] [Jianpeng Zhang]
+Open the folder in VS Code or in CMD, then enter "npm install". If you don't have npm yet, please go to https://www.npmjs.com/get-npm download and install it.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+##Features
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. support both Windows and Unix style command line args (e.g., --version vs. /v)
+2. allow passing directory paths vs. file paths, and recursively process all children under that directory
+3. add support for more HTTP result codes. For example, redirects with 301, 307, 308 (i.e., follow the redirect to the new location)
+4. add support for timeouts, DNS resolution issues, or other server errors when accessing a bad URL. A bad domain, URL, or server shouldn't crash your tool.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+##Instructions
+
+Enter "node checkURLs.js xxx" xxx is the filename you want to check.
+
+Enter "node checkURLs.js --v" to check current version. (or -v, /v, /version)
+
+
+
+
+

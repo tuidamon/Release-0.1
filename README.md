@@ -4,6 +4,11 @@
 
 Open the folder in VS Code or in CMD, then enter "npm install". If you don't have npm yet, please go to https://www.npmjs.com/get-npm download and install it.
 
+Install dependencies:
+```
+npm i --save colors request
+```
+
 ## Features
 
 1. support both Windows and Unix style command line args (e.g., --version vs. /v)
@@ -13,9 +18,9 @@ Open the folder in VS Code or in CMD, then enter "npm install". If you don't hav
 
 ## Instructions
 
-Enter "node checkURLs.js xxx" xxx is the filename you want to check.
+Enter "node checkURL.js xxx" xxx is the filename you want to check.
 
-Enter "node checkURLs.js --v" to check current version. (or -v, /v, /version)
+Enter "node checkURL.js --v" to check current version. (or -v, /v, /version)
 
 
 

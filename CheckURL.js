@@ -3,6 +3,7 @@ const request = require('request');
 const opts = process.argv.slice(2);   //remove the first two arguments 'E:\\Node.js\\node.exe','E:\\DPS909\\releast0.1\\CheckURL.js'
 const urlR = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,10}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g; //from https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
 const regexp = new RegExp(urlR); //match Url using regular expression
+const colors = require('colors');
 
 //if there's no input
 if (opts.length == 0) {
@@ -36,11 +37,11 @@ if (opts[0].startsWith("--") || opts[0].startsWith("/")) {     //if it's a commn
                     if (err) {
                         console.log("Error encountered: " + url)
                     } else if (response.statusCode == 200) {
-                        console.log("This page is ok: " + url)
+                        console.log("This page is ok: " + url.green)
                     } else if (response.statusCode == 400 || response.statusCode == 404) {
-                        console.log("Can not find this page: " + url)
+                        console.log("Can not find this page: " + url.red)
                     } else {
-                        console.log("Unkown status: " + url)
+                        console.log("Unkown status: " + url.grey)
                     }
                 })
             })

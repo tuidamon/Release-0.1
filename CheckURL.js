@@ -13,43 +13,83 @@ if (opts.length == 0) {
     return process.exit(0);
 }
 
+let option = "--good";
+
 //process with different inputs
 if (opts[0].startsWith("--") || opts[0].startsWith("/")) {     //if it's a commnand that start with -- or /
     if (opts[0] == "--v" || opts[0] == "--version" || opts[0] == "/v" || opts[0] == "/version") {
         console.log("Current version: 1.0");
+    } else if (opts[0] == "--good" || opts[0] == "/good" || opts[0] == "--bad" || opts[0] == "/bad" || opts[0] == "--all" || opts[0] === "/all") {
+        option = opts[0];
+        console.log(option)
+        opts.shift();
+        opts.map(arg => {
+            readFile(arg, option);
+        })
+    } else if (opts[0] == "--j" || opts[0] == "/j" || opts[0] == "--json" || opts[0] == "/json") {
+        let resultList = [];
+        let result = { url: String, status: Number }
+
     } else {
         console.log("Invalid input, please enter '--v' for version or filename for testing.");
     }
-    return process.exit(0);
+
 } else if (fs.existsSync(opts[0]) == false) {               //check if the file exist
     console.log("filename " + opts[0] + " does not exist.")
 } else (
+    opts.map(arg => {
+        readFile(arg, option);
+    })
+)
 
-    fs.readFile(opts[0], (err, data) => {                 //read the file
+function readFile(filename, opts) {
+    fs.readFile(filename, (err, data) => {                 //read the file
         if (err) {
             console.log(err);
         } else {
             var strData = data.toString();
             var URLs = strData.match(regexp);
             URLs = [...new Set(URLs)];
-            URLs.forEach(url => {
-                request.get({ uri: url, timeout: 5000 }, function (err, response, body) {
-                    if (err) {
-                        console.log("Error encountered: " + url)
-                    } else if (response.statusCode == 200) {
-                        console.log("This page is ok: " + url.green)
-                    } else if (response.statusCode == 400 || response.statusCode == 404) {
-                        console.log("Can not find this page: " + url.red)
-                    } else {
-                        console.log("Unkown status: " + url.grey)
+            for (let i = 0; i < URLs.length; i++) {
+                request.get({ uri: URLs[i], timeout: 5000 }, function (err, response, body) {
+                    if (opts == "--all" || opts == "/all") {
+                        if (err) {
+                            console.log("Error encountered: " + URLs[i])
+                        } else if (response.statusCode == 200) {
+                            console.log("This page is ok: " + URLs[i].green)
+                        } else if (response.statusCode == 400 || response.statusCode == 404) {
+                            console.log("Can not find this page: " + URLs[i].red)
+                        } else {
+                            console.log("Unkown status: " + URLs[i].grey)
+                        }
+                    } else if (opts == "--good" || opts == "/good") {
+                        if (!err && response.statusCode == 200) {
+                            console.log("This page is ok: " + URLs[i].green)
+                        }
+                    } else if (opts == "--bad" || opts == "/bad") {
+                        if (!err && (response.statusCode == 400 || response.statusCode == 404)) {
+                            console.log("Can not find this page: " + URLs[i].red)
+                        }
                     }
                 })
-            })
+
+            }
+
+            // URLs.forEach(url => {
+            //     request.get({ uri: url, timeout: 5000 }, function (err, response, body) {
+            //         if (err) {
+            //             console.log("Error encountered: " + url)
+            //         } else if (response.statusCode == 200) {
+            //             console.log("This page is ok: " + url.green)
+            //         } else if (response.statusCode == 400 || response.statusCode == 404) {
+            //             console.log("Can not find this page: " + url.red)
+            //         } else {
+            //             console.log("Unkown status: " + url.grey)
+            //         }
+            //     })
+            // })
         }
     })
-
-)
-
-
+}
 
 

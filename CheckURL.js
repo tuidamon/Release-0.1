@@ -4,6 +4,7 @@ const opts = process.argv.slice(2);   //remove the first two arguments 'E:\\Node
 const urlR = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,10}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g; //from https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
 const regexp = new RegExp(urlR); //match Url using regular expression
 const colors = require('colors');
+const { rejects } = require('assert');
 
 //if there's no input
 if (opts.length == 0) {
@@ -14,6 +15,8 @@ if (opts.length == 0) {
 }
 
 let option = "--good";
+let resultList = [];
+let result = { url: String, status: Number }
 
 //process with different inputs
 if (opts[0].startsWith("--") || opts[0].startsWith("/")) {     //if it's a commnand that start with -- or /
@@ -27,8 +30,18 @@ if (opts[0].startsWith("--") || opts[0].startsWith("/")) {     //if it's a commn
             readFile(arg, option);
         })
     } else if (opts[0] == "--j" || opts[0] == "/j" || opts[0] == "--json" || opts[0] == "/json") {
-        let resultList = [];
-        let result = { url: String, status: Number }
+
+        // let promise1 = new Promise((resolve, reject) => {
+        //     if (true) {
+        //         printJSON(opts[1])
+        //         resolve(resultList)
+        //     }
+        // })
+        // promise1.then((resultList) => {
+        //     console.log(resultList);
+
+        // });
+        printJSON(opts[1])
 
     } else {
         console.log("Invalid input, please enter '--v' for version or filename for testing.");
@@ -41,6 +54,35 @@ if (opts[0].startsWith("--") || opts[0].startsWith("/")) {     //if it's a commn
         readFile(arg, option);
     })
 )
+
+function printResult() {
+    console.log(resultList)
+}
+
+function printJSON(filename) {
+    fs.readFile(filename, (err, data) => {                 //read the file
+        if (err) {
+            console.log(err);
+        } else {
+            var strData = data.toString();
+            var URLs = strData.match(regexp);
+            URLs = [...new Set(URLs)];
+            URLs.forEach(url => {
+                request.get({ uri: url, timeout: 5000 }, function (err, response, body) {
+                    if (err) {
+                        // console.log("Error encountered: " + url)
+                    } else {
+                        result.url = url
+                        result.status = response.statusCode
+                        resultList.push(result)
+                        console.log(resultList)
+                    }
+                })
+            })
+            printResult()
+        }
+    })
+}
 
 function readFile(filename, opts) {
     fs.readFile(filename, (err, data) => {                 //read the file
@@ -75,19 +117,6 @@ function readFile(filename, opts) {
 
             }
 
-            // URLs.forEach(url => {
-            //     request.get({ uri: url, timeout: 5000 }, function (err, response, body) {
-            //         if (err) {
-            //             console.log("Error encountered: " + url)
-            //         } else if (response.statusCode == 200) {
-            //             console.log("This page is ok: " + url.green)
-            //         } else if (response.statusCode == 400 || response.statusCode == 404) {
-            //             console.log("Can not find this page: " + url.red)
-            //         } else {
-            //             console.log("Unkown status: " + url.grey)
-            //         }
-            //     })
-            // })
         }
     })
 }

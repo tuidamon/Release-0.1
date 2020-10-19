@@ -43,6 +43,8 @@ if (opts[0].startsWith("--") || opts[0].startsWith("/")) {     //if it's a commn
         // });
         printJSON(opts[1])
 
+    } else if (opts[0] == "--ignore") {
+        readUrlsWithoutIgnore(opts[1], opts[2]);
     } else {
         console.log("Invalid input, please enter '--v' for version or filename for testing.");
     }
@@ -57,6 +59,51 @@ if (opts[0].startsWith("--") || opts[0].startsWith("/")) {     //if it's a commn
 
 function printResult() {
     console.log(resultList)
+}
+
+function readUrlsWithoutIgnore(ignoreFile, file) {
+    fs.readFile(ignoreFile, (err, data) => {
+        if (err) {
+            console.log(err);
+        } else {
+            var strData = data.toString();
+            var ignoreURLs = strData.match(regexp);
+            ignoreURLs = [...new Set(ignoreURLs)];
+
+            fs.readFile(file, (err, data) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    var strData = data.toString();
+                    var URLs = strData.match(regexp);
+                    URLs = [...new Set(URLs)];
+
+                    for (let i = 0; i < URLs.length; i++) {
+                        let isIgnore = false;
+                        for (let j = 0; j < ignoreURLs.length; j++) {
+                            if (URLs[i].startsWith(ignoreURLs[j])) {
+                                isIgnore = true;
+                            }
+                        }
+
+                        if (!isIgnore) {
+                            request.get({ uri: URLs[i], timeout: 5000 }, function (err, res, body) {
+                                if (err) {
+                                    console.log(colors.yellow(`${err} ${URLs[i]}`));
+                                } else if (res.statusCode == 200) {
+                                    console.log("This page is ok: " + URLs[i].green)
+                                } else if (res.statusCode == 404 || res.statusCode == 400) {
+                                    console.log("Can not find this page: " + URLs[i].red)
+                                } else {
+                                    console.log("Unkown status: " + URLs[i].grey)
+                                }
+                            })
+                        }
+                    }
+                }
+            })
+        }
+    })
 }
 
 function printJSON(filename) {

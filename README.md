@@ -15,6 +15,7 @@ npm i --save colors request
 2. allow passing directory paths vs. file paths, and recursively process all children under that directory
 3. add support for more HTTP result codes. For example, redirects with 301, 307, 308 (i.e., follow the redirect to the new location)
 4. add support for timeouts, DNS resolution issues, or other server errors when accessing a bad URL. A bad domain, URL, or server shouldn't crash your tool.
+5. add feature for ignore url(s). If you enter 'Webpage-status-checking-tool --ignore [ignore url list filename] [url list filename]', this tool test all urls without ignore urls.
 
 ## Instructions
 
